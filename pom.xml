@@ -9,18 +9,18 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Client library for Algorand</description>
-    <url>https://github.com/algorand/java-algorand-sdk</url>
+    <url>https://github.com/gmalouf/java-algorand-sdk</url>
 
     <scm>
-        <connection>scm:git:git@github.com:algorand/java-algorand-sdk.git</connection>
-        <developerConnection>scm:git:git@github.com:algorand/java-algorand-sdk.git</developerConnection>
-        <url>https://github.com/algorand/java-algorand-sdk</url>
+        <connection>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</connection>
+        <developerConnection>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</developerConnection>
+        <url>https://github.com/gmalouf/java-algorand-sdk</url>
     </scm>
 
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://github.com/algorand/java-algorand-sdk/blob/master/LICENSE</url>
+            <url>https://github.com/gmalouf/java-algorand-sdk/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -413,7 +413,7 @@
                             <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
                             <includes><include>**/*</include></includes>
                             <repositoryName>java-algorand-sdk</repositoryName>      <!-- github repo name -->
-                            <repositoryOwner>algorand</repositoryOwner>
+                            <repositoryOwner>gmalouf</repositoryOwner>
                         </configuration>
                         <executions>
                             <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
@@ -463,7 +463,7 @@
                             <checkinComment>Publishing javadoc for ${project.artifactId}:${project.version}</checkinComment>
                             <content>${project.reporting.outputDirectory}/apidocs</content>
                             <skipDeletedFiles>true</skipDeletedFiles>
-                            <pubScmUrl>scm:git:git@github.com:algorand/java-algorand-sdk.git</pubScmUrl>
+                            <pubScmUrl>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</pubScmUrl>
                             <scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
                         </configuration>
                         <executions>
