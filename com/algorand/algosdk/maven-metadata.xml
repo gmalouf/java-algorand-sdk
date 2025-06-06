@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.algorand</groupId>
+  <artifactId>algosdk</artifactId>
+  <versioning>
+    <versions>
+      <version>2.8.2-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20250606160742</lastUpdated>
+  </versioning>
+</metadata>
