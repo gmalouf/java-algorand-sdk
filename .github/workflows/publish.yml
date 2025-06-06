@@ -17,7 +17,9 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-24.04
-    permissions: write-all
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,7 +35,7 @@ jobs:
         run: mvn package
 
       - name: Publish to GitHub
-        run: mvn deploy -P github,default
+        run: mvn -e deploy -P github,default
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
