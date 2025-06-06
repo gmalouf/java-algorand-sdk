@@ -21,6 +21,7 @@ jobs:
       contents: write # For building and potentially deploying packages
       id-token: write # For OIDC authentication, if used
       pages: write    # Specifically for deploying to GitHub Pages
+      packages: write
       pull-requests: write # Often needed by plugins for status checks, etc.
       statuses: write      # For updating commit statuses
     steps:
@@ -33,6 +34,9 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           architecture: x64
+          server-id: github
+          server-username: GITHUB_ACTOR
+          server-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build with Maven
         run: mvn package
