@@ -35,14 +35,14 @@ jobs:
         run: mvn package
 
       - name: Publish to GitHub
-        run: mvn -e deploy -P github,default
+        run: mvn deploy -P github,default
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Javadocs to GitHub
         run: mvn site -P github,default
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Apache Maven Central
         uses: actions/setup-java@v4
