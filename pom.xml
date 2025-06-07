@@ -385,7 +385,6 @@
         </profile>
         <profile>
             <id>github</id>
-            <id>github</id>
             <distributionManagement>
                 <repository>
                     <id>local-mvn-repo</id> <!-- Distinct ID to avoid conflict with global 'github' ID -->
