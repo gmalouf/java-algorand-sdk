@@ -38,6 +38,14 @@ jobs:
           server-username: GITHUB_ACTOR
           server-password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Print Effective POM
+        run: mvn help:effective-pom -P github,default > effective-pom.xml
+          - name: Upload Effective POM for Debugging
+            uses: actions/upload-artifact@v4
+            with:
+              name: effective-pom
+              path: effective-pom.xml
+
       - name: Build with Maven
         run: mvn package
 
