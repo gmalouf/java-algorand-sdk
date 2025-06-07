@@ -11,6 +11,19 @@
     <description>Client library for Algorand</description>
     <url>https://github.com/gmalouf/java-algorand-sdk</url>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/gmalouf/java-algorand-sdk</url>
+        </repository>
+        <snapshotRepository>
+            <id>github-snapshots</id>
+            <name>GitHub Packages Snapshots</name>
+            <url>https://maven.pkg.github.com/gmalouf/java-algorand-sdk</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <scm>
         <connection>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</connection>
         <developerConnection>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</developerConnection>
@@ -371,27 +384,18 @@
             </build>
         </profile>
         <profile>
-            <!--
-                Maven github release profile.
-                'mvn clean deploy -P github'
-
-                Update settings.xml with the following server configuration:
-                  <settings>
-                   <servers>
-                     <server>
-                       <id>github</id>
-                       <password>your-github-oauth-token</password>
-                     </server>
-                   </servers>
-                 </settings>
-            -->
             <id>github</id>
             <distributionManagement>
                 <repository>
-                    <id>internal.repo</id>
-                    <name>Temporary Staging Repository</name>
+                    <id>local-mvn-repo</id> <!-- Distinct ID to avoid conflict with global 'github' ID -->
+                    <name>Temporary Staging Repository for mvn-repo branch</name>
                     <url>file://${project.build.directory}/mvn-repo</url>
                 </repository>
+                <snapshotRepository>
+                    <id>local-mvn-repo-snapshots</id>
+                    <name>Temporary Staging Repository for mvn-repo branch Snapshots</name>
+                    <url>file://${project.build.directory}/mvn-repo</url>
+                </snapshotRepository>
             </distributionManagement>
             <build>
                 <plugins>
@@ -399,79 +403,16 @@
                         <artifactId>maven-deploy-plugin</artifactId>
                         <version>2.8.1</version>
                         <configuration>
-                            <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.github</groupId>
-                        <artifactId>site-maven-plugin</artifactId>
-                        <version>0.11</version>
-                        <configuration>
-                            <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
-                            <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-                            <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
-                            <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-                            <includes><include>**/*</include></includes>
-                            <repositoryName>java-algorand-sdk</repositoryName>      <!-- github repo name -->
-                            <repositoryOwner>gmalouf</repositoryOwner>
+                            <!-- Deploy to the local file system as defined in this profile's distributionManagement -->
+                            <altDeploymentRepository>local-mvn-repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
                         </configuration>
                         <executions>
-                            <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
                             <execution>
-                                <goals>
-                                    <goal>site</goal>
-                                </goals>
+                                <id>deploy-to-local-repo</id>
                                 <phase>deploy</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- publish javadoc to github in site phase -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven.javadoc.plugin.version}</version>
-                        <configuration>
-                          <source>${java.version}</source>
-                          <doclint>none</doclint>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>gen-javadocs</id>
                                 <goals>
-                                    <goal>javadoc</goal>
+                                    <goal>deploy</goal>
                                 </goals>
-                                <phase>site</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>3.0.0</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-site-plugin</artifactId>
-                        <version>3.7.1</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-scm-publish-plugin</artifactId>
-                        <version>3.0.0</version>
-                        <configuration>
-                            <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
-                            <checkinComment>Publishing javadoc for ${project.artifactId}:${project.version}</checkinComment>
-                            <content>${project.reporting.outputDirectory}/apidocs</content>
-                            <skipDeletedFiles>true</skipDeletedFiles>
-                            <pubScmUrl>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</pubScmUrl>
-                            <scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>publish-scm</goal>
-                                </goals>
-                                <phase>site</phase>
                             </execution>
                         </executions>
                     </plugin>
