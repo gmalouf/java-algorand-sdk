@@ -3,21 +3,21 @@
   <groupId>com.algorand</groupId>
   <artifactId>algosdk</artifactId>
   <versioning>
-    <lastUpdated>20250607013632</lastUpdated>
+    <lastUpdated>20250607014453</lastUpdated>
     <snapshot>
-      <timestamp>20250607.013632</timestamp>
+      <timestamp>20250607.014453</timestamp>
       <buildNumber>2</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>2.8.2-20250607.013632-1</value>
-        <updated>20250607013632</updated>
+        <value>2.8.2-20250607.014453-1</value>
+        <updated>20250607014453</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>2.8.2-20250607.013632-1</value>
-        <updated>20250607013632</updated>
+        <value>2.8.2-20250607.014453-1</value>
+        <updated>20250607014453</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
