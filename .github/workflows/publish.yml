@@ -38,14 +38,6 @@ jobs:
           server-username: GITHUB_ACTOR
           server-password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Print Effective POM
-        run: mvn help:effective-pom -P github,default > effective-pom.xml
-      - name: Upload Effective POM for Debugging
-        uses: actions/upload-artifact@v4
-        with:
-          name: effective-pom
-          path: effective-pom.xml
-
       - name: Build with Maven
         run: mvn package
 
@@ -65,21 +57,18 @@ jobs:
           user_name: 'github-actions[bot]' # Recommended bot user for commits
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
-      # Step 1: Build the Javadocs/Site using Maven (local generation)
       - name: Build Javadocs/Site
         run: mvn site -P default # Removed -P github as we are not deploying with maven plugin
 
-      # Step 2: Configure GitHub Pages
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v4
+      - name: Publish Javadocs to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3 # Use this action for direct branch publishing
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 3: Upload the generated Javadocs/Site as an artifact for Pages
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'target/site' # Path to your generated Javadocs/site directory
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/site      # Directory containing the Javadocs/site
+          publish_branch: gh-pages      # The target branch for GitHub Pages
+          force_orphan: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
 
       # Step 4: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
