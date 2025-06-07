@@ -46,6 +46,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # New Step: Publish content of target/mvn-repo to mvn-repo branch
+      - name: Publish to mvn-repo branch
+        uses: peaceiris/actions-gh-pages@v3 
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/mvn-repo    # Directory containing the artifacts
+          publish_branch: mvn-repo        # The target branch
+          force_orphan: false              # Overwrite branch history (consider 'false' for appending)
+          user_name: 'github-actions[bot]' # Recommended bot user for commits
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
       # Step 1: Build the Javadocs/Site using Maven (local generation)
       - name: Build Javadocs/Site
         run: mvn site -P default # Removed -P github as we are not deploying with maven plugin
