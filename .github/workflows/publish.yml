@@ -58,7 +58,7 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
 
       - name: Build Javadocs/Site
-        run: mvn site -P default # Removed -P github as we are not deploying with maven plugin
+        run: mvn site -P github,default
 
       - name: Publish Javadocs to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3 # Use this action for direct branch publishing
@@ -69,11 +69,6 @@ jobs:
           force_orphan: false
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-
-      # Step 4: Deploy the artifact to GitHub Pages
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v3
 
       - name: Set up Apache Maven Central
         uses: actions/setup-java@v4
