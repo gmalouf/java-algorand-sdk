@@ -11,19 +11,6 @@
     <description>Client library for Algorand</description>
     <url>https://github.com/gmalouf/java-algorand-sdk</url>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/gmalouf/java-algorand-sdk</url>
-        </repository>
-        <snapshotRepository>
-            <id>github-snapshots</id>
-            <name>GitHub Packages Snapshots</name>
-            <url>https://maven.pkg.github.com/gmalouf/java-algorand-sdk</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <scm>
         <connection>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</connection>
         <developerConnection>scm:git:git@github.com:gmalouf/java-algorand-sdk.git</developerConnection>
@@ -33,7 +20,7 @@
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://github.com/gmalouf/java-algorand-sdk/blob/master/LICENSE</url>
+            <url>https://github.com/algorand/java-algorand-sdk/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
