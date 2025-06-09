@@ -34,9 +34,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           architecture: x64
-          server-id: github
-          server-username: GITHUB_ACTOR
-          server-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build with Maven
         run: mvn package
