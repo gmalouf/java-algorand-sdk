@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag_version }}
+
       - name: Set up JDK 11 for x64
         uses: actions/setup-java@v4
         with:
@@ -38,7 +39,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # New Step: Publish content of target/mvn-repo to mvn-repo branch
       - name: Publish to mvn-repo branch
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -53,7 +53,7 @@ jobs:
         run: mvn site -P github,default
 
       - name: Publish Javadocs to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v3 # Use this action for direct branch publishing
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: target/site/apidocs
