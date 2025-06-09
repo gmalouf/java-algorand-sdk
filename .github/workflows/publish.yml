@@ -8,11 +8,6 @@ on:
         default: 'x.x.x'
         required: true
         type: 'string'
-      dry_run:
-        description: 'Whether this is a dry_run publish.'
-        default: false
-        required: true
-        type: 'boolean'
 
 jobs:
   build-and-publish:
