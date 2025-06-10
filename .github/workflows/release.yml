@@ -90,10 +90,6 @@ jobs:
           generate_release_notes: false
 
       # Start publishing artifacts and javadocs only if skip_publish is false - should match publish.yml save for if checks
-      - if: ${{ inputs.skip_publish == false }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.tag_version }}
 
       - name: Set up JDK 11 for x64
         if: ${{ inputs.skip_publish == false }}
@@ -107,7 +103,7 @@ jobs:
         if: ${{ inputs.skip_publish == false }}
         run: mvn package
 
-      - name: Publish to GitHub Packages
+      - name: Publish to Local Maven Repo
         if: ${{ inputs.skip_publish == false }}
         run: mvn deploy -P github,default
         env:
