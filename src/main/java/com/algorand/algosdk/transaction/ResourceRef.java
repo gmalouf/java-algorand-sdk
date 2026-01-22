@@ -41,6 +41,7 @@ public class ResourceRef {
 
     /**
      * JsonCreator constructor for ResourceRef deserialization.
+     * Empty ResourceRef objects (all fields null) are converted to empty box references.
      */
     @JsonCreator
     public ResourceRef(
@@ -58,6 +59,12 @@ public class ResourceRef {
         this.holding = holding;
         this.locals = locals;
         this.box = box;
+
+        // Handle empty ResourceRef objects by converting to empty box references
+        if (address == null && asset == null && app == null &&
+            holding == null && locals == null && box == null) {
+            this.box = new BoxRef(0L, new byte[0]);
+        }
     }
 
     /**

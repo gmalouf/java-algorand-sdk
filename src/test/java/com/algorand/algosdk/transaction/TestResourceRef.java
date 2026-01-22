@@ -109,9 +109,9 @@ public class TestResourceRef {
     }
 
     @Test
-    public void testEmptyResourceRef() {
+    public void testEmptyResourceRefViaDefaultConstructor() {
         ResourceRef ref = new ResourceRef();
-        
+
         assertNull(ref.address);
         assertNull(ref.asset);
         assertNull(ref.app);
@@ -122,9 +122,27 @@ public class TestResourceRef {
     }
 
     @Test
+    public void testEmptyResourceRefViaJsonCreatorBecomesEmptyBoxRef() {
+        // Empty ResourceRef via JsonCreator (deserialization) converts to empty box reference
+        ResourceRef ref = new ResourceRef(null, null, null, null, null, null);
+
+        assertNull(ref.address);
+        assertNull(ref.asset);
+        assertNull(ref.app);
+        assertNull(ref.holding);
+        assertNull(ref.locals);
+        assertNotNull(ref.box);
+        assertEquals(Long.valueOf(0L), ref.box.index);
+        assertArrayEquals(new byte[0], ref.box.name);
+        assertFalse(ref.isEmpty());
+        assertDoesNotThrow(ref::validate);
+    }
+
+    @Test
     public void testResourceRefValidationFailsWhenEmpty() {
+        // Only the default constructor creates truly empty ResourceRef
         ResourceRef ref = new ResourceRef();
-        
+
         IllegalStateException exception = assertThrows(IllegalStateException.class, ref::validate);
         assertEquals("ResourceRef must have one resource type set", exception.getMessage());
     }
@@ -220,9 +238,49 @@ public class TestResourceRef {
     @Test
     public void testResourceRefEqualityWithNull() throws NoSuchAlgorithmException {
         ResourceRef ref = ResourceRef.forAsset(123L);
-        
+
         assertNotEquals(ref, null);
         assertNotEquals(ref, "not a ResourceRef");
         assertEquals(ref, ref); // self equality
+    }
+
+    @Test
+    public void testHandleEmptyResourceReferencesInAccessList() throws Exception {
+        // Create a transaction with empty ResourceRef objects in the access list
+        Address from = new Address("BH55E5RMBD4GYWXGX5W5PJ5JAHPGM5OXKDQH5DC4O2MGI7NW4H6VOE4CP4");
+        byte[] gh = com.algorand.algosdk.util.Encoder.decodeFromBase64("SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=");
+
+        Transaction tx = Transaction.ApplicationCallTransactionBuilder()
+                .sender(from)
+                .applicationId(111L)
+                .firstValid(322575)
+                .lastValid(322575)
+                .genesisHash(gh)
+                .build();
+
+        // Add empty ResourceRef objects via JsonCreator
+        java.util.List<ResourceRef> accessList = new java.util.ArrayList<>();
+        accessList.add(ResourceRef.forAddress(from));
+        accessList.add(new ResourceRef(null, null, null, null, null, null)); // Empty ResourceRef
+        accessList.add(ResourceRef.forAsset(123L));
+        tx.access = accessList;
+
+        // Verify empty ResourceRef was converted to empty box reference
+        assertNotNull(tx.access.get(1).box);
+        assertEquals(Long.valueOf(0L), tx.access.get(1).box.index);
+        assertArrayEquals(new byte[0], tx.access.get(1).box.name);
+
+        // Encode and decode to verify serialization/deserialization works
+        String encoded = com.algorand.algosdk.util.Encoder.encodeToBase64(
+            com.algorand.algosdk.util.Encoder.encodeToMsgPack(tx));
+        Transaction decoded = com.algorand.algosdk.util.Encoder.decodeFromMsgPack(
+            encoded, Transaction.class);
+
+        // Verify decoded transaction has the empty box reference
+        assertNotNull(decoded.access);
+        assertEquals(3, decoded.access.size());
+        assertNotNull(decoded.access.get(1).box);
+        assertEquals(Long.valueOf(0L), decoded.access.get(1).box.index);
+        assertArrayEquals(new byte[0], decoded.access.get(1).box.name);
     }
 }
