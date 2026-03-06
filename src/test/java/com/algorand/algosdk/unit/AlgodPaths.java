@@ -1,5 +1,8 @@
 package com.algorand.algosdk.unit;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import com.algorand.algosdk.crypto.Address;
 import com.algorand.algosdk.unit.utils.TestingUtils;
 import com.algorand.algosdk.v2.client.algod.*;
@@ -91,7 +94,11 @@ public class AlgodPaths {
     @When("we make an Account Information call against account {string} with exclude {string}")
     public void accountInformation(String string, String string2) throws NoSuchAlgorithmException {
         AccountInformation aiq = algodClient.AccountInformation(new Address(string));
-        if (TestingUtils.notEmpty(string2)) aiq.exclude(Enums.Exclude.forValue(string2));
+        if (TestingUtils.notEmpty(string2)) {
+            aiq.exclude(Arrays.stream(string2.split(","))
+                .map(Enums.Exclude::forValue)
+                .collect(Collectors.toList()));
+        }
         ps.q = aiq;
     }
 
@@ -179,5 +186,26 @@ public class AlgodPaths {
     @When("we make a GetBlockTxids call against block number {long}")
     public void we_make_a_get_block_txids_call_against_block_number(Long round) {
         ps.q = algodClient.GetBlockTxids(round);
+    }
+
+    @When("we make an Account Assets Information call against account {string} with limit {long} and next {string}")
+    public void accountAssetsInformation(String account, Long limit, String next) throws NoSuchAlgorithmException {
+        AccountAssetsInformation q = algodClient.AccountAssetsInformation(new Address(account));
+        if (TestingUtils.notEmpty(limit)) q.limit(limit);
+        if (TestingUtils.notEmpty(next)) q.next(next);
+        ps.q = q;
+    }
+
+    @When("we make an Account Applications Information call against account {string} with limit {long} next {string} and include {string}")
+    public void accountApplicationsInformation(String account, Long limit, String next, String include) throws NoSuchAlgorithmException {
+        AccountApplicationsInformation q = algodClient.AccountApplicationsInformation(new Address(account));
+        if (TestingUtils.notEmpty(include)) {
+            q.include(Arrays.stream(include.split(","))
+                .map(Enums.Include::forValue)
+                .collect(Collectors.toList()));
+        }
+        if (TestingUtils.notEmpty(limit)) q.limit(limit);
+        if (TestingUtils.notEmpty(next)) q.next(next);
+        ps.q = q;
     }
 }
