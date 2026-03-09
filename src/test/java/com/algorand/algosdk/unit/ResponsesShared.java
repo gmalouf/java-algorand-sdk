@@ -212,6 +212,12 @@ public class ResponsesShared {
                     case "GetBlockTxids":
                         response = algod.GetBlockTxids(1234L).execute();
                         break;
+                    case "AccountAssetsInformation":
+                        response = algod.AccountAssetsInformation(new Address()).execute();
+                        break;
+                    case "AccountApplicationsInformation":
+                        response = algod.AccountApplicationsInformation(new Address()).execute();
+                        break;
                     default:
                         Assertions.fail("Unsupported algod endpoint: " + endpoint);
                 }
